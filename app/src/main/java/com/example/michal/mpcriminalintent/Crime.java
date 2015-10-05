@@ -1,6 +1,5 @@
 package com.example.michal.mpcriminalintent;
 
-
 import java.util.Date;
 import java.util.UUID;
 
@@ -20,7 +19,7 @@ public class Crime
         mId = UUID.randomUUID();
 
         // Initializing the Date variable using the default Date constructor. This sets mDate to
-        // the current date. This will be the default date for a crime.
+        // teh current date. This will be the default date for a crime.
         mDate = new Date();
     }
 
