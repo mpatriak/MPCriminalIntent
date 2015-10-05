@@ -21,12 +21,14 @@ public class CrimeFragment extends Fragment
     private EditText mTitleField;
     private Button mDateButton;
     private CheckBox mSolvedCheckBox;
+    private java.text.DateFormat dateFormat;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         mCrime = new Crime();
+        dateFormat = android.text.format.DateFormat.getLongDateFormat(this.getActivity());
     }
 
     // Inflates fragment_crime.xml
@@ -61,7 +63,8 @@ public class CrimeFragment extends Fragment
         // Gets a reference to the new button, sets its text as the date of the crime, and disabled
         // it for now.
         mDateButton = (Button)v.findViewById(R.id.crime_date);
-        mDateButton.setText(mCrime.getDate().toString());
+        mDateButton.setText(dateFormat.format(mCrime.getDate()));
+        //mDateButton.setText(mCrime.getDate().toString());
         mDateButton.setEnabled(false);
 
         // Gets a reference to the CheckBox and sets a listener that will update the mSolved
