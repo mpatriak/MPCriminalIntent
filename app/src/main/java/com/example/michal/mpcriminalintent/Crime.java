@@ -24,6 +24,13 @@ public class Crime
         mDate = new Date();
     }
 
+    // Called by getView() from the ArrayAdapter to display the crime names in the list view.
+    @Override
+    public String toString()
+    {
+        return mTitle;
+    }
+
     public UUID getId()
     {
         return mId;
