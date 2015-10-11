@@ -1,8 +1,11 @@
 package com.example.michal.mpcriminalintent;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +43,7 @@ public class CrimeListFragment extends ListFragment
         // This is a ListFragment convenience method that can be used to set the adapter of the
         // implicit ListView managed by CrimeListFragment
         setListAdapter(adapter);
+
     }
 
     @Override
@@ -47,11 +51,11 @@ public class CrimeListFragment extends ListFragment
     {
         Crime c = ((CrimeAdapter)getListAdapter()).getItem(position);
 
-        // Start CriminalActivity
-        // CrimeListFragment creates an explicit intent that names the CrimeActivity class.
+        // Start CrimePagerActivity
+        // CrimeListFragment creates an explicit intent that names the CrimePagerActivity class.
         // getActivity() is used to pass its hosting activity as the Context object that the
         // Intent constructor requires.
-        Intent i = new Intent(getActivity(), CrimeActivity.class);
+        Intent i = new Intent(getActivity(), CrimePagerActivity.class);
         // Making mCrimeId an Intent extra tells CrimeFragment which Crime to display. This
         // passes a string key and the value to pair it with.
         i.putExtra(CrimeFragment.EXTRA_CRIME_ID, c.getId());
