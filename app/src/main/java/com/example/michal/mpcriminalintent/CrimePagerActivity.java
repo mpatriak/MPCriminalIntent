@@ -58,10 +58,14 @@ public class CrimePagerActivity extends AppCompatActivity
 
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener()
         {
+            // Tells whether the page animation is being actively dragged, settling to a steady
+            // state, or idling.
             public void onPageScrollStateChanged(int state) {}
 
+            // Tells exactly where the page is going to be.
             public void onPageScrolled(int pos, float posOffset, int posOffsetPixels) {}
 
+            // Sets the title if the page selected to the current crime.
             public void onPageSelected(int pos)
             {
                 Crime crime = mCrimes.get(pos);
@@ -72,6 +76,9 @@ public class CrimePagerActivity extends AppCompatActivity
             }
         });
 
+        // Finds the index of the Crime to display by looping through and checking each crime's
+        // ID. When the Crime instance whose mId matches the crimeId in the intent extra, it sets
+        // the current item to the index of that crime.
         UUID crimeId = (UUID)getIntent().getSerializableExtra(CrimeFragment.EXTRA_CRIME_ID);
         for (int i = 0; i < mCrimes.size(); i++)
         {

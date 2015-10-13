@@ -1,7 +1,10 @@
 package com.example.michal.mpcriminalintent;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -12,6 +15,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -21,6 +25,8 @@ public class CrimeFragment extends Fragment
 {
     // Key for extra.
     public static final String EXTRA_CRIME_ID = "com.example.michal.mpcriminalintent.crime_id";
+    private static final String DIALOG_DATE = "date";
+    private static final int REQUEST_DATE = 0;
 
     private Crime mCrime;
     private EditText mTitleField;
@@ -39,6 +45,13 @@ public class CrimeFragment extends Fragment
         fragment.setArguments(args);
 
         return fragment;
+    }
+
+    // Private method that encapsulates the code used to set the date button's text.
+    private void updateDate()
+    {
+        //mDateButton.setText(mCrime.getDate().toString());
+        mDateButton.setText(dateFormat.format(mCrime.getDate()));
     }
 
     @Override
@@ -69,21 +82,17 @@ public class CrimeFragment extends Fragment
         mTitleField = (EditText)v.findViewById(R.id.crime_title);
         // Sets the title for the Crime view.
         mTitleField.setText(mCrime.getTitle());
-        mTitleField.addTextChangedListener(new TextWatcher()
-        {
+        mTitleField.addTextChangedListener(new TextWatcher() {
             // This method returns a string, which will be used to set the Crime's title.
-            public void onTextChanged(CharSequence c, int start, int before, int count)
-            {
+            public void onTextChanged(CharSequence c, int start, int before, int count) {
                 mCrime.setTitle(c.toString());
             }
 
-            public void beforeTextChanged(CharSequence c, int start, int count, int after)
-            {
+            public void beforeTextChanged(CharSequence c, int start, int count, int after) {
                 // This space intentionally left blank.
             }
 
-            public void afterTextChanged(Editable c)
-            {
+            public void afterTextChanged(Editable c) {
                 // This space intentionally left blank.
             }
         });
@@ -91,9 +100,20 @@ public class CrimeFragment extends Fragment
         // Gets a reference to the new button, sets its text as the date of the crime, and disabled
         // it for now.
         mDateButton = (Button)v.findViewById(R.id.crime_date);
-        mDateButton.setText(dateFormat.format(mCrime.getDate()));
+        //mDateButton.setText(dateFormat.format(mCrime.getDate()));
         //mDateButton.setText(mCrime.getDate().toString());
-        mDateButton.setEnabled(false);
+        updateDate();
+        mDateButton.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                DatePickerFragment dialog = DatePickerFragment.newInstance(mCrime.getDate());
+                //Makes CrimeFragment the target fragment of the DatePickerFragment instance.
+                dialog.setTargetFragment(CrimeFragment.this, REQUEST_DATE);
+                dialog.show(fm, DIALOG_DATE);
+            }
+        });
 
         // Gets a reference to the CheckBox and sets a listener that will update the mSolved
         // field of the Crime.
@@ -112,8 +132,21 @@ public class CrimeFragment extends Fragment
         return v;
 
 
+    } // End onCreateView.
 
-    } // End onCreate.
+    //Retrieve the extra, set the date on the Crime, and refresh the text of the date button.
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if (resultCode != Activity.RESULT_OK) return;
+        if (requestCode == REQUEST_DATE)
+        {
+            Date date = (Date)data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
+            mCrime.setDate(date);
+            //mDateButton.setText(mCrime.getDate().toString());
+            updateDate();
+        }
+    }
 
 
 } // End class CrimeFragment.
