@@ -1,13 +1,19 @@
 package com.example.michal.mpcriminalintent;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -61,6 +67,8 @@ public class CrimeFragment extends Fragment
         // getIntent() returns the Intent that was used to start the activity
         // .getSerializableExtra(String) is called on the Intent to pull the UUID out into a
         // variable.
+
+        setHasOptionsMenu(true);
         //UUID crimeId = (UUID)getActivity().getIntent().getSerializableExtra(EXTRA_CRIME_ID);
 
         //Retrieves the UUID from the fragment arguments.
@@ -68,15 +76,30 @@ public class CrimeFragment extends Fragment
         // Used to fetch the Crime from the CrimeLab once the ID is retrieved.
         mCrime = CrimeLab.get(getActivity()).getCrime(crimeId);
         dateFormat = android.text.format.DateFormat.getLongDateFormat(this.getActivity());
+        getActivity().setTitle(R.string.crimes_title);
+
+
     }
 
     // Inflates fragment_crime.xml
+    @TargetApi(11)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState)
     {
         // Passes the layout resource ID
         // False parameter means fragment will be inflated in code.
         View v = inflater.inflate(R.layout.fragment_crime, parent, false);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+        {
+            if (NavUtils.getParentActivityName(getActivity()) != null)
+            {
+                AppCompatActivity activity = (AppCompatActivity) getActivity();
+                activity.getSupportActionBar().setDisplayShowHomeEnabled(true);
+                activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                activity.getSupportActionBar().setIcon(R.mipmap.ic_launcher);
+            }
+        }
 
         // Gets a reference to the EditText and adds a listener.
         mTitleField = (EditText)v.findViewById(R.id.crime_title);
@@ -103,10 +126,8 @@ public class CrimeFragment extends Fragment
         //mDateButton.setText(dateFormat.format(mCrime.getDate()));
         //mDateButton.setText(mCrime.getDate().toString());
         updateDate();
-        mDateButton.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View v)
-            {
+        mDateButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
                 FragmentManager fm = getActivity().getSupportFragmentManager();
                 DatePickerFragment dialog = DatePickerFragment.newInstance(mCrime.getDate());
                 //Makes CrimeFragment the target fragment of the DatePickerFragment instance.
@@ -120,13 +141,11 @@ public class CrimeFragment extends Fragment
         mSolvedCheckBox = (CheckBox)v.findViewById(R.id.crime_solved);
         // Displays the Crime's solved status.
         mSolvedCheckBox.setChecked(mCrime.isSolved());
-        mSolvedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
-        {
-           public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
-           {
-               // Set the crime's solved property
-               mCrime.setSolved(isChecked);
-           }
+        mSolvedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // Set the crime's solved property
+                mCrime.setSolved(isChecked);
+            }
         });
 
         return v;
@@ -148,5 +167,20 @@ public class CrimeFragment extends Fragment
         }
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                if (NavUtils.getParentActivityName(getActivity()) != null)
+                {
+                    NavUtils.navigateUpFromSameTask(getActivity());
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
 } // End class CrimeFragment.

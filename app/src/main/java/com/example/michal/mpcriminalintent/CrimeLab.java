@@ -27,13 +27,13 @@ public class CrimeLab
         // Creates an empty ArrayList.
         mCrimes = new ArrayList<Crime>();
         // Populates the ArrayList.
-        for (int i = 0; i < 100; i++)
+        /*for (int i = 0; i < 100; i++)
         {
             Crime c = new Crime();
             c.setTitle("Crime #" + i);
             c.setSolved(i % 2 == 0); // Every other one.
             mCrimes.add(c);
-        }
+        }*/
     }
 
     // Get method to call constructor to create the instance. getApplicationContext() is called
@@ -46,6 +46,12 @@ public class CrimeLab
             sCrimeLab = new CrimeLab(c.getApplicationContext());
         }
         return sCrimeLab;
+    }
+
+    // Adds a Crime to the ArrayList when the user clicks the new Crime button
+    public void addCrime(Crime c)
+    {
+        mCrimes.add(c);
     }
 
     // Returns the ArrayList.
