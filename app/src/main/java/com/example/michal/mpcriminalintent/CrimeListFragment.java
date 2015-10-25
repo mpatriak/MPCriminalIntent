@@ -35,6 +35,7 @@ public class CrimeListFragment extends ListFragment
     private boolean mSubtitleVisible;
     private ArrayList<Crime> mCrimes;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
