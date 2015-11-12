@@ -66,6 +66,12 @@ public class CrimeLab
         mCrimes.add(c);
     }
 
+    // Deletes a Crime from the ArrayList.
+    public void deleteCrime(Crime c)
+    {
+        mCrimes.remove(c);
+    }
+
     // Tries to serialize the crimes and returns a Boolean indicating success.
     public boolean saveCrimes()
     {
