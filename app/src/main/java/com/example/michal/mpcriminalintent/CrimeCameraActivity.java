@@ -10,12 +10,6 @@ import android.view.WindowManager;
  */
 public class CrimeCameraActivity extends SingleFragmentActivity
 {
-    @Override
-    protected Fragment createFragment()
-    {
-        return new CrimeCameraFragment();
-    }
-
     // Hides the status bar and action bar.
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -24,7 +18,12 @@ public class CrimeCameraActivity extends SingleFragmentActivity
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         // Hide the status bar and other OS-level chrome.
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    protected Fragment createFragment()
+    {
+        return new CrimeCameraFragment();
     }
 } // End class CrimeCameraActivity.
